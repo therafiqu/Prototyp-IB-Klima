@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --background: 255 255 255;
+  --background-muted: 248 250 252;
+  --foreground: 10 37 64;
+  --muted: 71 85 105;
+  --card: 255 255 255;
+  --border: 226 232 240;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: 15 23 42;
+  --background-muted: 30 41 59;
+  --foreground: 241 245 249;
+  --muted: 148 163 184;
+  --card: 30 41 59;
+  --border: 51 65 85;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background-color: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: var(--font-montserrat), Montserrat, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+@layer base {
+  body :where(header, footer, section, article, div, p, h1, h2, h3, a, span, li, label, button) {
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 280ms;
+    transition-timing-function: ease;
+  }
+
+  :focus-visible {
+    outline: 2px solid #1e88e5;
+    outline-offset: 3px;
+  }
+}
+
+::selection {
+  background: #1565c0;
+  color: #fff;
+}
+
+.scroll-progress {
+  display: none;
+}
+
+.hero-media {
+  transform-origin: 30% 16%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise-in,
+  .hero-rise > * {
+    animation: rise-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-rise > *:nth-child(1) {
+    animation-delay: 0.08s;
+  }
+
+  .hero-rise > *:nth-child(2) {
+    animation-delay: 0.18s;
+  }
+
+  .hero-rise > *:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .hero-rise > *:nth-child(4) {
+    animation-delay: 0.42s;
+  }
+
+  .hero-rise > *:nth-child(5) {
+    animation-delay: 0.52s;
+  }
+
+  .hero-media {
+    animation: hero-kenburns 22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .signal-dot {
+    animation: signal-pulse 2.6s ease-out infinite;
+  }
+
+  .ambient-drift {
+    animation: ambient-drift 16s ease-in-out infinite;
+  }
+
+  .call-bar-in {
+    animation: call-bar-in 0.6s 0.4s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+
+  .success-pop {
+    animation: success-pop 0.5s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-progress {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 60;
+      display: block;
+      height: 2px;
+      transform-origin: left center;
+      pointer-events: none;
+      background: linear-gradient(90deg, #1565c0, #7ec8ff);
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-parallax {
+      animation: hero-parallax linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-kenburns {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hero-parallax {
+  from {
+    transform: translate3d(0, -2%, 0);
+  }
+  to {
+    transform: translate3d(0, 6%, 0);
+  }
+}
+
+@keyframes signal-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(126 200 255 / 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgb(126 200 255 / 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgb(126 200 255 / 0);
+  }
+}
+
+@keyframes ambient-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(-22px, 14px, 0);
+  }
+}
+
+@keyframes call-bar-in {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes success-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scroll-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .scroll-progress {
+    display: none !important;
+  }
+
+  .hero-parallax {
+    animation: none !important;
+    transform: none !important;
+  }
+}
