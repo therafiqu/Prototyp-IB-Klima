@@ -1,4 +1,4 @@
-import { Building2, Map, MapPin, Phone } from "lucide-react";
+import { Building2, Mail, Map, MapPin, Phone } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { ContactForm } from "@/components/contact-form";
@@ -66,6 +66,14 @@ export function Contact() {
                       className="text-2xl font-bold tracking-tight hover:underline"
                     >
                       {siteConfig.phoneDisplay}
+                    </a>
+                  </InfoRow>
+                  <InfoRow icon={Mail} label="E-mail">
+                    <a
+                      href={siteConfig.emailHref}
+                      className="break-all text-lg font-bold tracking-tight hover:underline sm:text-xl"
+                    >
+                      {siteConfig.email}
                     </a>
                   </InfoRow>
                   <InfoRow icon={Map} label="Obszar">

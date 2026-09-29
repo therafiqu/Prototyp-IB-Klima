@@ -61,14 +61,14 @@ export function Header() {
           : "border-b border-transparent bg-transparent text-white",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-content items-center justify-between gap-3 px-4 sm:px-6 md:h-[4.5rem]">
+      <div className="mx-auto flex h-[7.25rem] max-w-content items-center justify-between gap-3 px-4 sm:px-6">
         <Link
           href="/"
-          aria-label="IB-Klima, strona główna"
+          aria-label="InsideBeta, strona główna"
           className="rounded-xl"
           onClick={() => setOpen(false)}
         >
-          <Logo inverted={!solid} />
+          <Logo priority tone={solid ? "surface" : "onDark"} />
         </Link>
 
         <nav className="hidden items-center gap-5 md:flex lg:gap-8" aria-label="Główne">

@@ -18,7 +18,7 @@ export function JsonLd() {
         url: siteConfig.url,
         telephone: siteConfig.phoneE164,
         image: `${siteConfig.url}/opengraph-image`,
-        logo: `${siteConfig.url}/icon.svg`,
+        logo: `${siteConfig.url}/icon`,
         description: siteConfig.description,
         address: {
           "@type": "PostalAddress",

@@ -27,7 +27,7 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <article className="bg-surface pb-28 pt-28 md:pt-36">
+    <article className="bg-surface pb-28 pt-36 md:pt-40">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="rise-in">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#1565C0] dark:text-[#90CAF9]">

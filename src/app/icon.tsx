@@ -6,11 +6,10 @@ import {
   metadataBrandFonts,
 } from "@/lib/metadata-brand";
 
-export const alt = "InsideBeta — Klimatyzacja w Małopolsce";
-export const size = { width: 1200, height: 630 };
+export const size = { width: 192, height: 192 };
 export const contentType = "image/png";
 
-export default async function OpenGraphImage() {
+export default async function Icon() {
   const { fontBold, lockupSrc } = await loadMetadataBrandAssets();
 
   return new ImageResponse(
@@ -26,7 +25,7 @@ export default async function OpenGraphImage() {
           fontFamily: "Montserrat",
         }}
       >
-        <BrandLockup lockupSrc={lockupSrc} lockupWidth={520} taglineSize={36} taglineGap={4} />
+        <BrandLockup lockupSrc={lockupSrc} lockupWidth={142} taglineSize={12} taglineGap={2} />
       </div>
     ),
     {

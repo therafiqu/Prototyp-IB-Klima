@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="border-t border-white/10 bg-[#0A2540] text-white dark:bg-[#061828]">
       <div className="mx-auto grid max-w-content gap-10 px-4 py-14 sm:px-6 md:grid-cols-3 md:py-16">
         <div>
-          <Logo inverted />
+          <Logo size="footer" />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/75">
             Montaż i serwis klimatyzacji w całej Małopolsce. Darmowa wycena i gwarancja jakości.
           </p>

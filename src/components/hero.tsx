@@ -22,7 +22,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-[#061828] via-[#061828]/72 to-[#061828]/5" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#061828]/80 via-transparent to-[#061828]/25" />
 
-      <div className="relative z-10 mx-auto w-full max-w-content px-4 pb-28 pt-28 sm:px-6 md:pb-20 md:pt-32">
+      <div className="relative z-10 mx-auto w-full max-w-content px-4 pb-28 pt-36 sm:px-6 md:pb-20 md:pt-40">
         <div className="hero-rise max-w-3xl">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-sm">
             <span className="signal-dot h-1.5 w-1.5 rounded-full bg-[#7EC8FF]" aria-hidden />

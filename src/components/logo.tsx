@@ -1,21 +1,45 @@
-import { AirVent } from "lucide-react";
+import Image from "next/image";
+import lockup from "@/images/logo-insidebeta.png";
+import lockupOnLight from "@/images/logo-insidebeta-on-light.png";
 import { cn } from "@/lib/styles";
 
-export function Logo({ inverted = false }: { inverted?: boolean }) {
+const sizes = {
+  header: "h-24 w-auto",
+  footer: "h-auto w-44 sm:w-52",
+} as const;
+
+export function Logo({
+  size = "header",
+  priority = false,
+  tone = "onDark",
+}: {
+  size?: keyof typeof sizes;
+  priority?: boolean;
+  /** `surface` swaps in a darker legal line on light backgrounds. The blue stays the same. */
+  tone?: "onDark" | "surface";
+}) {
+  const className = sizes[size];
+
+  if (tone === "surface") {
+    return (
+      <>
+        <Image
+          src={lockupOnLight}
+          alt="InsideBeta Sp. z o.o."
+          priority={priority}
+          className={cn(className, "dark:hidden")}
+        />
+        <Image
+          src={lockup}
+          alt="InsideBeta Sp. z o.o."
+          priority={priority}
+          className={cn(className, "hidden dark:block")}
+        />
+      </>
+    );
+  }
+
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2.5 text-lg font-bold tracking-tight",
-        inverted ? "text-white" : "text-foreground",
-      )}
-    >
-      <span
-        className="grid h-9 w-9 place-items-center rounded-xl bg-[#1E88E5] text-white shadow-sm shadow-[#1E88E5]/30"
-        aria-hidden
-      >
-        <AirVent className="h-5 w-5" />
-      </span>
-      IB-Klima
-    </span>
+    <Image src={lockup} alt="InsideBeta Sp. z o.o." priority={priority} className={className} />
   );
 }

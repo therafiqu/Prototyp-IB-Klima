@@ -2,10 +2,11 @@
 
 import { ChevronDown, CircleCheck, LoaderCircle, Phone } from "lucide-react";
 import { FormEvent, useRef, useState } from "react";
+import { sendContactEmail } from "@/app/actions/contact";
 import { siteConfig } from "@/lib/site";
 import { cn, primaryButtonClass } from "@/lib/styles";
 
-type Status = "idle" | "loading" | "success";
+type Status = "idle" | "loading" | "success" | "error";
 type Field = "name" | "phone" | "propertyType" | "location" | "area" | "rooms" | "message";
 type Errors = Partial<Record<Field, string>>;
 
@@ -113,8 +114,20 @@ export function ContactForm() {
     }
 
     setStatus("loading");
-    await new Promise((resolve) => window.setTimeout(resolve, 700));
-    setStatus("success");
+    try {
+      const result = await sendContactEmail({
+        name,
+        phone,
+        propertyType,
+        location,
+        area: area.empty ? "" : String(area.amount),
+        rooms: rooms.empty ? "" : String(rooms.amount),
+        message,
+      });
+      setStatus(result.ok ? "success" : "error");
+    } catch {
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
@@ -365,7 +378,17 @@ export function ContactForm() {
         </div>
       </div>
 
-      <button type="submit" className={`${primaryButtonClass} mt-6 w-full sm:w-auto`} disabled={status === "loading"}>
+      {status === "error" ? (
+        <p className="mt-6 text-sm text-red-600 dark:text-red-400" role="alert">
+          Nie udało się wysłać zgłoszenia. Spróbuj ponownie albo zadzwoń.
+        </p>
+      ) : null}
+
+      <button
+        type="submit"
+        className={`${primaryButtonClass} w-full sm:w-auto ${status === "error" ? "mt-4" : "mt-6"}`}
+        disabled={status === "loading"}
+      >
         {status === "loading" ? (
           <>
             <LoaderCircle className="h-5 w-5 animate-spin" aria-hidden />

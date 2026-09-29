@@ -4,6 +4,8 @@ export const siteConfig = {
   phoneDisplay: "696\u00a0658\u00a0661",
   phoneHref: "tel:+48696658661",
   phoneE164: "+48696658661",
+  email: "ib.wyroba@gmail.com",
+  emailHref: "mailto:ib.wyroba@gmail.com",
   street: "Prof. Wojciecha Marii Bartla 19G/87",
   postalCode: "30-386",
   city: "Kraków",
