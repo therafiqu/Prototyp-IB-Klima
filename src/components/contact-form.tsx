@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, CircleCheck, LoaderCircle, Phone } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { sendContactEmail } from "@/app/actions/contact";
 import { siteConfig } from "@/lib/site";
 import { cn, primaryButtonClass } from "@/lib/styles";
@@ -41,6 +41,8 @@ const labelClass = "mb-1.5 block text-sm font-semibold text-foreground";
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
+  const formRef = useRef<HTMLFormElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const propertyTypeRef = useRef<HTMLSelectElement>(null);
@@ -48,6 +50,21 @@ export function ContactForm() {
   const areaRef = useRef<HTMLInputElement>(null);
   const roomsRef = useRef<HTMLInputElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (status !== "success" || !dialog || dialog.open) return;
+    dialog.showModal();
+    return () => {
+      if (dialog.open) dialog.close();
+    };
+  }, [status]);
+
+  function dismissSuccess() {
+    dialogRef.current?.close();
+    setStatus("idle");
+    setErrors({});
+  }
 
   function clearError(field: keyof Errors) {
     setErrors((current) => {
@@ -124,47 +141,54 @@ export function ContactForm() {
         rooms: rooms.empty ? "" : String(rooms.amount),
         message,
       });
+      if (result.ok) formRef.current?.reset();
       setStatus(result.ok ? "success" : "error");
     } catch {
       setStatus("error");
     }
   }
 
-  if (status === "success") {
-    return (
-      <div
-        id="formularz"
-        className="rise-in scroll-mt-28 rounded-3xl border border-line bg-card p-6 shadow-card dark:shadow-card-dark sm:p-8"
-        role="status"
-        aria-live="polite"
-      >
-        <span className="success-pop grid h-12 w-12 place-items-center rounded-2xl bg-[#1E88E5]/10 text-[#1565C0] dark:text-[#90CAF9]">
-          <CircleCheck className="h-6 w-6" aria-hidden />
-        </span>
-        <h3 className="mt-5 text-2xl font-bold text-foreground">Dziękujemy. Zgłoszenie przyjęte.</h3>
-        <p className="mt-3 leading-relaxed text-muted">
-          Oddzwonimy wkrótce, żeby umówić darmową wycenę. Wolisz szybciej? Zadzwoń — odbierzemy.
-        </p>
-        <a href={siteConfig.phoneHref} className={`${primaryButtonClass} mt-6`}>
-          <Phone className="h-5 w-5" aria-hidden />
-          Zadzwoń: {siteConfig.phoneDisplay}
-        </a>
-        <button
-          type="button"
-          className="mt-4 block text-sm font-semibold text-[#1565C0] hover:underline dark:text-[#90CAF9]"
-          onClick={() => {
-            setStatus("idle");
-            setErrors({});
-          }}
-        >
-          Wyślij kolejne zgłoszenie
-        </button>
-      </div>
-    );
-  }
-
   return (
+    <>
+    {status === "success" ? (
+      <dialog
+        ref={dialogRef}
+        aria-labelledby="formularz-dziekujemy"
+        className="m-auto w-[min(100%-1.5rem,28rem)] rounded-3xl border-0 bg-transparent p-0 backdrop:bg-[#020617]/70"
+        onCancel={(event) => {
+          event.preventDefault();
+          dismissSuccess();
+        }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) dismissSuccess();
+        }}
+      >
+        <div className="rise-in rounded-3xl border border-line bg-card p-6 shadow-card dark:shadow-card-dark sm:p-8">
+          <span className="success-pop grid h-12 w-12 place-items-center rounded-2xl bg-[#1E88E5]/10 text-[#1565C0] dark:text-[#90CAF9]">
+            <CircleCheck className="h-6 w-6" aria-hidden />
+          </span>
+          <h3 id="formularz-dziekujemy" className="mt-5 text-2xl font-bold text-foreground">
+            Dziękujemy. Zgłoszenie przyjęte.
+          </h3>
+          <p className="mt-3 leading-relaxed text-muted">
+            Oddzwonimy wkrótce, żeby umówić darmową wycenę. Wolisz szybciej? Zadzwoń — odbierzemy.
+          </p>
+          <a href={siteConfig.phoneHref} className={`${primaryButtonClass} mt-6`}>
+            <Phone className="h-5 w-5" aria-hidden />
+            Zadzwoń: {siteConfig.phoneDisplay}
+          </a>
+          <button
+            type="button"
+            className="mt-4 block text-sm font-semibold text-[#1565C0] hover:underline dark:text-[#90CAF9]"
+            onClick={dismissSuccess}
+          >
+            Wyślij kolejne zgłoszenie
+          </button>
+        </div>
+      </dialog>
+    ) : null}
     <form
+      ref={formRef}
       id="formularz"
       onSubmit={onSubmit}
       noValidate
@@ -399,5 +423,6 @@ export function ContactForm() {
         )}
       </button>
     </form>
+    </>
   );
 }

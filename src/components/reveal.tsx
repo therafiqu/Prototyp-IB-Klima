@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const viewport = { once: true, margin: "0px 0px -80px 0px" } as const;
+const viewport = { once: true, margin: "0px 0px -100px 0px" } as const;
 
 const staggerTags = {
   div: motion.div,
@@ -32,10 +32,10 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0, y: 64, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={viewport}
-      transition={{ duration: 0.6, delay, ease }}
+      transition={{ duration: 0.85, delay, ease }}
     >
       {children}
     </motion.div>
@@ -45,7 +45,7 @@ export function Reveal({
 export function Stagger({
   children,
   className,
-  stagger = 0.1,
+  stagger = 0.14,
   as = "div",
 }: {
   children: ReactNode;
@@ -65,7 +65,7 @@ export function Stagger({
       variants={{
         hidden: {},
         visible: {
-          transition: { staggerChildren: reduce ? 0 : stagger, delayChildren: reduce ? 0 : 0.04 },
+          transition: { staggerChildren: reduce ? 0 : stagger, delayChildren: reduce ? 0 : 0.08 },
         },
       }}
     >
@@ -90,8 +90,8 @@ export function StaggerItem({
     <Comp
       className={className}
       variants={{
-        hidden: reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 28 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+        hidden: reduce ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 80, scale: 0.94 },
+        visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, ease } },
       }}
     >
       {children}

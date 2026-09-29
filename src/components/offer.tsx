@@ -59,13 +59,15 @@ export function Offer() {
                 )}
               >
                 <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={offer.image}
-                    alt={offer.alt}
-                    fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
-                  />
+                  <div className="card-parallax absolute -inset-y-[22%] inset-x-0">
+                    <Image
+                      src={offer.image}
+                      alt={offer.alt}
+                      fill
+                      sizes="(min-width: 768px) 33vw, 100vw"
+                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.045]"
+                    />
+                  </div>
                   <span className="absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-2xl bg-white text-[#1565C0] shadow-md transition duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-lg">
                     <offer.icon className="h-5 w-5" aria-hidden />
                   </span>

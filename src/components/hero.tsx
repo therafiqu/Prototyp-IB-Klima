@@ -7,7 +7,7 @@ import { primaryButtonClass, secondaryOnDarkClass } from "@/lib/styles";
 export function Hero() {
   return (
     <section className="relative flex min-h-[100svh] items-end overflow-hidden md:items-center">
-      <div className="hero-parallax absolute -inset-y-[14%] inset-x-0">
+      <div className="hero-parallax absolute -top-[22%] -bottom-[34%] inset-x-0">
         <Image
           src={heroImage}
           alt="Nowoczesny salon z zamontowaną klimatyzacją ścienną"
