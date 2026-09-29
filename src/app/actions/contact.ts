@@ -1,6 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
+import { siteConfig } from "@/lib/site";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -70,7 +71,7 @@ export async function sendContactEmail(
 
   const { error } = await resend.emails.send({
     from: "kontakt@ib-klima.pl",
-    to: "ave.rafiqq@gmail.com",
+    to: siteConfig.email,
     subject: "Nowe zgłoszenie z formularza IB-Klima",
     html,
   });
