@@ -2,13 +2,14 @@
 
 import { ChevronDown, CircleCheck, LoaderCircle, Phone } from "lucide-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { sendContactEmail } from "@/app/actions/contact";
 import { siteConfig } from "@/lib/site";
 import { cn, primaryButtonClass } from "@/lib/styles";
 
 type Status = "idle" | "loading" | "success" | "error";
 type Field = "name" | "phone" | "propertyType" | "location" | "area" | "rooms" | "message";
 type Errors = Partial<Record<Field, string>>;
+
+const CONTACT_ENDPOINT = "/api/contact.php";
 
 const propertyTypes = [
   { value: "mieszkanie-w-bloku", label: "Mieszkanie w bloku" },
@@ -87,6 +88,7 @@ export function ContactForm() {
     const area = optionalNumber(String(data.get("area") ?? ""));
     const rooms = optionalNumber(String(data.get("rooms") ?? ""));
     const message = String(data.get("message") ?? "").trim();
+    const website = String(data.get("website") ?? "").trim();
     const nextErrors: Errors = {};
 
     if (name.length < 2 || !/[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/.test(name)) {
@@ -132,17 +134,31 @@ export function ContactForm() {
 
     setStatus("loading");
     try {
-      const result = await sendContactEmail({
-        name,
-        phone,
-        propertyType,
-        location,
-        area: area.empty ? "" : String(area.amount),
-        rooms: rooms.empty ? "" : String(rooms.amount),
-        message,
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          propertyType,
+          location,
+          area: area.empty ? "" : String(area.amount),
+          rooms: rooms.empty ? "" : String(rooms.amount),
+          message,
+          website,
+        }),
       });
-      if (result.ok) formRef.current?.reset();
-      setStatus(result.ok ? "success" : "error");
+
+      let payload: { success?: boolean } | null = null;
+      try {
+        payload = (await response.json()) as { success?: boolean };
+      } catch {
+        payload = null;
+      }
+
+      const ok = response.ok && payload?.success === true;
+      if (ok) formRef.current?.reset();
+      setStatus(ok ? "success" : "error");
     } catch {
       setStatus("error");
     }
@@ -192,7 +208,7 @@ export function ContactForm() {
       id="formularz"
       onSubmit={onSubmit}
       noValidate
-      className="scroll-mt-28 rounded-3xl border border-line bg-card p-6 shadow-card dark:shadow-card-dark sm:p-8"
+      className="relative scroll-mt-28 rounded-3xl border border-line bg-card p-6 shadow-card dark:shadow-card-dark sm:p-8"
       aria-describedby="formularz-info"
     >
       <h3 className="text-2xl font-bold text-foreground">Formularz zgłoszenia</h3>
@@ -201,6 +217,19 @@ export function ContactForm() {
       </p>
 
       <div className="mt-6 space-y-4">
+        {/* Honeypot for bots — visually hidden, not part of the visible UI. */}
+        <div className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+          <label htmlFor="website">Strona WWW</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </div>
+
         <div>
           <label htmlFor="imie" className={labelClass}>
             Imię i nazwisko <span className="text-red-600 dark:text-red-400">*</span>

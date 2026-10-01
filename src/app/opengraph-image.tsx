@@ -6,6 +6,7 @@ import {
   metadataBrandFonts,
 } from "@/lib/metadata-brand";
 
+export const dynamic = "force-static";
 export const alt = "InsideBeta — Klimatyzacja w Małopolsce";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

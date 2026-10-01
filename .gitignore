@@ -23,5 +23,14 @@ yarn-error.log*
 .env*
 !.env.example
 
+# PHP secrets (never commit real Resend keys)
+/private/ib-klima-config.php
+/public/api/config.php
+/out/api/config.php
+**/ib-klima-config.php
+!**/ib-klima-config.example.php
+!/private/ib-klima-config.example.php
+!/public/api/config.example.php
+
 # typescript
 *.tsbuildinfo

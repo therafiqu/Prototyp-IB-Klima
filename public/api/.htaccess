@@ -1,0 +1,28 @@
+# Hardening for the public api/ directory on Apache (IDHosting).
+# Primary secret storage must be OUTSIDE httpdocs — see DEPLOYMENT.md.
+# These rules are defense-in-depth if a config file is misplaced here.
+
+<IfModule mod_authz_core.c>
+  # Apache 2.4+
+  <FilesMatch "(?i)^(config\.php|config\.local\.php|.*secrets.*\.php|ib-klima-config\.php)$">
+    Require all denied
+  </FilesMatch>
+  <Files "config.example.php">
+    Require all denied
+  </Files>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+  # Apache 2.2 fallback
+  <FilesMatch "(?i)^(config\.php|config\.local\.php|.*secrets.*\.php|ib-klima-config\.php)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+  <Files "config.example.php">
+    Order allow,deny
+    Deny from all
+  </Files>
+</IfModule>
+
+# Do not list directory contents.
+Options -Indexes

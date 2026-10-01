@@ -1,0 +1,14 @@
+# Deny listing; keep static assets public.
+Options -Indexes
+
+# Serve the statically exported 404 page for missing paths (Apache).
+ErrorDocument 404 /404.html
+
+# Prefer HTTPS when the host supports it (harmless if already HTTPS).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteCond %{HTTP_HOST} ^(www\.)?ib-klima\.pl$ [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
